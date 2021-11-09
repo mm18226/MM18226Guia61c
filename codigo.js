@@ -55,14 +55,14 @@ var fila="<tr><td class='id'></td><td class='foto'></td><td class='price'></td><
 function obtenerProductos() {
 	  fetch('https://retoolapi.dev/nsf73l/productos')
             .then(res=>res.json())
-            .then(data=>{productos=data;listarProductos(data)})
+            .then(data=>{
 			productos=data;
 			productos.forEach(
 				function(producto){
 					producto.price=parseFloat(producto.price)
 				});
 			listarProductos(data)
-}
+})}
 
 function ordenarDesc(p_array_json, p_key) {
    p_array_json.sort(function (a, b) {
