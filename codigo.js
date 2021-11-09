@@ -1,4 +1,4 @@
-var fila="<tr><td class='id'></td><td class='foto'></td><td class='price'></td><td class='title'></td><td class='description'></td><td class='category'></td></tr>";
+var fila="<tr><td class='id'></td><td class='foto'></td><td class='price'></td><td class='title'></td><td class='description'></td><td class='category'></td><td class='eliminar'></td></tr>";
 	 var productos=null;
   function codigoCat(catstr) {
 	var code="null";
@@ -18,7 +18,7 @@ var fila="<tr><td class='id'></td><td class='foto'></td><td class='price'></td><
 	  precio.setAttribute("onclick", "orden*=-1;listarProductos(productos);");
 	  var num=productos.length;
 	  var listado=document.getElementById("listado");
-	  var ids,titles,prices,descriptions,categories,fotos;
+	  var ids,titles,prices,descriptions,categories,fotos,eliminar;
 	  var tbody=document.getElementById("tbody"),nfila=0;
 	  tbody.innerHTML="";
 	  var catcode;
@@ -29,7 +29,8 @@ var fila="<tr><td class='id'></td><td class='foto'></td><td class='price'></td><
 	  descriptions=document.getElementsByClassName("description");
 	  categories=document.getElementsByClassName("category");   
 	  fotos=document.getElementsByClassName("foto");   
-	  prices=document.getElementsByClassName("price");   
+	  prices=document.getElementsByClassName("price");  
+	  eliminar=document.getElementsByClassName("eliminar");   
 	  if(orden===0) {orden=-1;precio.innerHTML="Precio"}
 	  else
 	     if(orden==1) {ordenarAsc(productos,"price");precio.innerHTML="Precio A";precio.style.color="darkgreen"}
@@ -43,6 +44,7 @@ var fila="<tr><td class='id'></td><td class='foto'></td><td class='price'></td><
 		titles[nfila].innerHTML=productos[nfila].title;
 		descriptions[nfila].innerHTML=productos[nfila].description;
 		categories[nfila].innerHTML=productos[nfila].category;
+		eliminar[nfila].innerHTML="<button  onclick=\"eliminarProducto("+productos[nfila].id+");\" style=\"color:black;cursor:pointer;\">Eliminar</button>";
 		catcode=codigoCat(productos[nfila].category);
 		tr=categories[nfila].parentElement;
 		tr.setAttribute("class",catcode);
@@ -53,7 +55,7 @@ var fila="<tr><td class='id'></td><td class='foto'></td><td class='price'></td><
 	}
 
 function obtenerProductos() {
-	  fetch('https://retoolapi.dev/Rb8LtE/productos')
+	  fetch('https://retoolapi.dev/BSujWl/productos')
             .then(res=>res.json())
             .then(data=>{
 			productos=data;
@@ -63,6 +65,39 @@ function obtenerProductos() {
 				});
 			listarProductos(data)
 })}
+
+function eliminarProducto(nfila){
+	/*var id=nfila+1;
+	var numero=String(id);*/
+ var direccion="https://retoolapi.dev/BSujWl/productos/"+nfila;
+	fetch(direccion,
+	{ method:"DELETE"})
+	.then(response=>response.json())
+	.then(data=>{productos=data;listarProductos(data)});
+	listarProductos();
+}
+
+function guardarProducto() {
+    var formulario = document.forms['formulario'];
+    var titles,prices,descriptions,categoria,fotos;
+      titles=String(formulario['tituloC'].value);
+      descriptions=String(formulario['descC'].value);
+      categoria = document.datosIn.catC[document.datosIn.catC.selectedIndex].value;  
+      fotos=String(formulario['imgC'].value);  
+      prices=String(formulario['precioC'].value);
+      var producto={image:fotos, price:prices, title:titles,description:descriptions,category:categoria}
+      
+    fetch('https://retoolapi.dev/BSujWl/productos',
+{ method:'POST',
+  body: JSON.stringify(producto),
+  headers: {
+     'Accept': 'application/json',
+     'Content-type': 'application/json; charset=UTF-8',
+  }
+})
+.then(response=>response.json()).then(data=>{productos=data;listarProductos(data)})
+return
+}
 
 function ingresarProductos(){
 	var formulario = document.forms['formulario'];
@@ -78,7 +113,7 @@ function ingresarProductos(){
 					
 		var addresult;
 		
-				fetch("https://retoolapi.dev/Rb8LtE/productos",
+				fetch("https://retoolapi.dev/BSujWl/productos",
 					{ method:"POST",
 						body: JSON.stringify(miproducto),
 					headers: {
