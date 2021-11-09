@@ -53,7 +53,7 @@ var fila="<tr><td class='id'></td><td class='foto'></td><td class='price'></td><
 	}
 
 function obtenerProductos() {
-	  fetch('https://retoolapi.dev/nsf73l/productos')
+	  fetch('https://retoolapi.dev/Rb8LtE/productos')
             .then(res=>res.json())
             .then(data=>{
 			productos=data;
@@ -63,6 +63,33 @@ function obtenerProductos() {
 				});
 			listarProductos(data)
 })}
+
+function ingresarProductos(){
+	var formulario = document.forms['formulario'];
+	var campo = formulario['campo'].value;
+
+	var miproducto={
+		id:"27",
+		image:formulario['link'].value,
+					price:formulario['precio'].value,
+				title:formulario['titulo'].value,
+				category:formulario['categoria'].value,	
+				description:formulario['descripcion'].value}				
+					
+		var addresult;
+		
+				fetch("https://retoolapi.dev/Rb8LtE/productos",
+					{ method:"POST",
+						body: JSON.stringify(miproducto),
+					headers: {
+						'Accept': 'application/json',
+						'Content-type': 'application/json; charset=UTF-8',
+							}	
+								})
+						.then(response=>response.json())
+						.then(data=>addresult=data);
+						listarProductos();
+}
 
 function ordenarDesc(p_array_json, p_key) {
    p_array_json.sort(function (a, b) {

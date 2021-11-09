@@ -17,7 +17,27 @@
 	   </header>
      
 	 <p><button onclick="obtenerProductos();this.style.display='none';">Obtener Productos</button></p>
+	   
+
 	 <div id="listado" style="display:none;">
+		<div>
+			<form id="formulario">
+				<lable>Link fotografia</lable>
+				<input type="text" id="link"/>
+				<lable>titulo</lable>
+				<input type="text" id="titulo"/>
+				<br>
+				<br>
+				<lable>descripción</lable>
+				<input type="text" id="descripcion"/>
+				<lable>categoria</lable>
+				<input type="text" id="categoria"/>
+				<lable>Precio</lable>
+				<input type="text" id="precio"/>
+				<br><br>
+				<button method="POST" onclick="ingresarProductos();this.style.display='none';">Ingresar producto</button>
+			</form>
+	   </div>
 	 <form name="filtroprods" id="filtroprods">
 	   Seleccione Categorias 
 	   <input type="checkbox" id="c1" value="c1" checked>Electronicos
